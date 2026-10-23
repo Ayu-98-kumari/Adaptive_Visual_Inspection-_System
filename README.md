@@ -63,6 +63,7 @@ MyDrive/Integrated/
         ├── anomaly_scores.csv
         ├── metrics.json
         ├── summary_table.csv
+        ├── method_choice.json
         ├── defect_type_metrics.json    (only if the optional section ran)
         ├── features/                   cached ResNet-18 embeddings (.npy)
         └── plots/                      PNG figures
@@ -84,6 +85,11 @@ One row per **test image and method** (3 methods → each image appears 3 times)
 | `threshold` | Threshold used for this category and method |
 | `prediction` | `1` if `anomaly_score >= threshold`, else `0` |
 | `predicted_defect_type` | Defect type predicted by the optional classifier; falls back to `true_defect_type` when no prediction exists (good images, toothbrush, or optional section removed) |
+| `normalized_score` | Same score on a common **0–1 scale for all methods**: share of good training images that look less unusual (0.97 = more unusual than 97% of good parts; 1.0 = more unusual than all of them) |
+| `normalized_threshold` | The threshold on that 0–1 scale |
+
+`prediction` is always based on the raw `anomaly_score` and `threshold`; the normalised columns are for
+comparing methods and for display.
 
 Tip: filter on one method (e.g. the best one from `summary_table.csv`) to get one row per image.
 
@@ -92,7 +98,7 @@ Tip: filter on one method (e.g. the best one from `summary_table.csv`) to get on
 {
   "hazelnut": {
     "knn_cosine":  {"auc": 0.97, "recall": 0.93, "false_alarm_rate": 0.05, "threshold": 0.12,
-                    "f1": 0.94, "tp": 65, "fp": 2, "tn": 38, "fn": 5},
+                    "f1": 0.94, "normalized_threshold": 0.98, "tp": 65, "fp": 2, "tn": 38, "fn": 5},
     "mahalanobis": {...},
     "ocsvm":       {...}
   },
@@ -102,9 +108,14 @@ Tip: filter on one method (e.g. the best one from `summary_table.csv`) to get on
 (numbers above are only an illustration). **RL scheduling** mainly needs `recall` (chance that a defect
 is caught) and `false_alarm_rate` (chance that a good item is flagged).
 
+### `method_choice.json`
+Which method we continue with and why: `chosen_method` (highest mean AUC), the best method per category, and
+mean AUC / recall / false-alarm rate per method.
+
 ### `summary_table.csv` and `plots/`
 Summary per category and method, plus `preprocessing_examples.png`, `roc_curves.png`,
-`confusion_matrices.png` and `defect_type_confusion.png`.
+`confusion_matrices.png`, `score_distributions.png` (all methods on the common 0–1 scale) and
+`defect_type_confusion.png`.
 
 ## Repository layout
 
