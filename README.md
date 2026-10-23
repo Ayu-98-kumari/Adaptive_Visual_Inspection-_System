@@ -65,6 +65,7 @@ MyDrive/Integrated/
         ├── summary_table.csv
         ├── method_choice.json
         ├── defect_type_metrics.json    (only if the optional section ran)
+        ├── defect_type_summary.csv     (only if the optional section ran)
         ├── features/                   cached ResNet-18 embeddings (.npy)
         └── plots/                      PNG figures
 ```
@@ -111,6 +112,10 @@ is caught) and `false_alarm_rate` (chance that a good item is flagged).
 ### `method_choice.json`
 Which method we continue with and why: `chosen_method` (highest mean AUC), the best method per category, and
 mean AUC / recall / false-alarm rate per method.
+
+### `defect_type_metrics.json` / `defect_type_summary.csv` (optional section)
+Per category: defect-type accuracy on the held-out half, what random guessing would give
+(1 ÷ number of defect types), number of defect types, and train/test sizes. Toothbrush is skipped.
 
 ### `summary_table.csv` and `plots/`
 Summary per category and method, plus `preprocessing_examples.png`, `roc_curves.png`,
