@@ -1,0 +1,6 @@
+# Extras beyond Google Colab's preinstalled libraries: none.
+#
+# The vision notebook only uses packages Colab already ships
+# (torch, torchvision, scikit-learn, numpy, pandas, matplotlib,
+# opencv, Pillow). Its first cell installs any of them that are missing.
+# Add a package here only if a future step needs something Colab lacks.
