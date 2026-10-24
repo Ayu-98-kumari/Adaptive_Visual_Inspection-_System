@@ -15,11 +15,11 @@ The other steps will be added by teammates and build on the vision outputs descr
 
 | Stage | What happens |
 |---|---|
-| Preprocessing | Resize to 224×224, ImageNet normalisation, optional histogram equalisation or Gaussian blur |
+| Preprocessing | Resize to 224×224, ImageNet normalisation, histogram equalisation or Gaussian blur (configurable) |
 | Features | Pretrained ResNet-18 (no training), last layer removed → 512-d embedding per image |
 | Anomaly detection | kNN (cosine, k=5), Mahalanobis distance, One-Class SVM – trained on good images only |
 | Evaluation | AUC, confusion matrix, recall, false-alarm rate per category and method |
-| Optional | Logistic regression predicts the defect type of defective images |
+| Defect type | Logistic regression predicts the defect type of defective images |
 
 Categories used: `grid`, `zipper`, `hazelnut`, `leather`, `toothbrush`.
 
@@ -68,8 +68,8 @@ MyDrive/Integrated/
         ├── metrics.json
         ├── summary_table.csv
         ├── method_choice.json
-        ├── defect_type_metrics.json    (only if the optional section ran)
-        ├── defect_type_summary.csv     (only if the optional section ran)
+        ├── defect_type_metrics.json    (only if Section 6 ran)
+        ├── defect_type_summary.csv     (only if Section 6 ran)
         ├── features/                   cached ResNet-18 embeddings (.npy)
         └── plots/                      PNG figures
 ```
@@ -89,7 +89,7 @@ One row per **test image and method** (3 methods → each image appears 3 times)
 | `anomaly_score` | Higher = more likely defective (scales differ between methods) |
 | `threshold` | **Default** threshold for this category and method: 95th percentile of good training scores |
 | `prediction` | `1` if `anomaly_score >= threshold`, else `0` (**use this one**) |
-| `predicted_defect_type` | Defect type predicted by the optional classifier; falls back to `true_defect_type` when no prediction exists (good images, toothbrush, or optional section removed) |
+| `predicted_defect_type` | Defect type predicted by the defect-type classifier; falls back to `true_defect_type` when no prediction exists (good images, toothbrush, or Section 6 switched off) |
 | `normalized_score` | Same score on a common **0–1 scale for all methods**: share of good training images that look less unusual (0.97 = more unusual than 97% of good parts; 1.0 = more unusual than all of them) |
 | `normalized_threshold` | The default threshold on that 0–1 scale (≈ 0.95) |
 | `threshold_f1thr` | Comparison threshold: best F1 on the test set (optimistic) |
@@ -125,7 +125,7 @@ default 95th-percentile threshold. Keys ending in `_f1thr` are the same numbers 
 Which method we continue with and why: `chosen_method` (highest mean AUC), the default threshold rule, the best
 method per category, and mean AUC / recall / false-alarm rate per method at both thresholds.
 
-### `defect_type_metrics.json` / `defect_type_summary.csv` (optional section)
+### `defect_type_metrics.json` / `defect_type_summary.csv` (Section 6)
 Per category:
 - `accuracy`: the average over both halves (train on A and test on B, then the reverse)
 - the accuracy of each half (`accuracy_train_a_test_b`, `accuracy_train_b_test_a`)
@@ -149,7 +149,7 @@ requirements.txt               extras beyond Colab defaults (currently none)
 
 Rules: never commit data, outputs or `.npy` files; commit notebooks with outputs cleared.
 
-## Local logic check (optional)
+## Local logic check
 
 Outside Colab, the config switches to `../local_test/` (relative to `notebooks/`, git-ignored).
 Put a tiny dummy dataset with the MVTec layout in `local_test/data/mvtec/` to check that the
