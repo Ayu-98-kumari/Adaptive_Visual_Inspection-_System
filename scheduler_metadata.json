@@ -1,0 +1,24 @@
+{
+    "project": "Adaptive Visual Inspection System",
+    "primary_scheduler": "Shared Q-learning",
+    "vision_model": "Mahalanobis",
+    "actions": [
+        "skip",
+        "prediction",
+        "expert"
+    ],
+    "risk_levels": [
+        "low",
+        "medium",
+        "high"
+    ],
+    "evaluation_split": "held-out test set",
+    "record_count": 101,
+    "image_path_preserved": true,
+    "unique_image_paths": true,
+    "evaluation_note": "This file contains held-out evaluation records only. Costs are simulated and expert review is assumed perfect. The upstream vision-model selection used test-set AUC, so the end-to-end evaluation is not fully independent.",
+    "outputs": {
+        "inference": "scheduler_inference_ready.csv",
+        "evaluation": "scheduler_evaluation.csv"
+    }
+}

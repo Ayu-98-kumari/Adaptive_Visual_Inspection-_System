@@ -1,0 +1,102 @@
+image_path,category,risk_level,selected_action,mahalanobis_prediction,recommended_next_step,final_decision_status
+leather/test/color/010.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/good/013.png,zipper,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+hazelnut/test/cut/007.png,hazelnut,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/combined/005.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+hazelnut/test/print/008.png,hazelnut,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/poke/010.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+hazelnut/test/print/010.png,hazelnut,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+toothbrush/test/defective/018.png,toothbrush,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+hazelnut/test/good/014.png,hazelnut,medium,expert,0,Route image to an expert for review,Pending expert review
+zipper/test/combined/000.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+grid/test/broken/003.png,grid,low,expert,0,Route image to an expert for review,Pending expert review
+hazelnut/test/hole/011.png,hazelnut,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/squeezed_teeth/006.png,zipper,medium,expert,0,Route image to an expert for review,Pending expert review
+toothbrush/test/defective/002.png,toothbrush,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+hazelnut/test/good/028.png,hazelnut,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+leather/test/glue/013.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/good/023.png,zipper,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+hazelnut/test/crack/004.png,hazelnut,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/good/006.png,leather,medium,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+zipper/test/broken_teeth/013.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/glue/014.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/split_teeth/000.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+hazelnut/test/hole/008.png,hazelnut,medium,expert,0,Route image to an expert for review,Pending expert review
+zipper/test/combined/012.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/split_teeth/017.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+hazelnut/test/crack/000.png,hazelnut,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+hazelnut/test/good/020.png,hazelnut,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+leather/test/color/018.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+grid/test/glue/002.png,grid,medium,expert,0,Route image to an expert for review,Pending expert review
+toothbrush/test/defective/016.png,toothbrush,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+hazelnut/test/good/024.png,hazelnut,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+leather/test/glue/011.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/broken_teeth/015.png,zipper,medium,expert,0,Route image to an expert for review,Pending expert review
+zipper/test/good/017.png,zipper,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+grid/test/metal_contamination/008.png,grid,medium,expert,0,Route image to an expert for review,Pending expert review
+zipper/test/good/002.png,zipper,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+grid/test/broken/009.png,grid,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/poke/003.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+grid/test/good/006.png,grid,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+grid/test/glue/000.png,grid,low,expert,0,Route image to an expert for review,Pending expert review
+leather/test/good/016.png,leather,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+zipper/test/fabric_interior/010.png,zipper,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+hazelnut/test/good/023.png,hazelnut,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+hazelnut/test/good/025.png,hazelnut,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+toothbrush/test/good/010.png,toothbrush,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+zipper/test/split_teeth/001.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+toothbrush/test/good/001.png,toothbrush,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+grid/test/thread/000.png,grid,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/glue/015.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/poke/006.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/color/015.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/broken_teeth/014.png,zipper,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+zipper/test/fabric_interior/012.png,zipper,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+grid/test/thread/002.png,grid,medium,expert,0,Route image to an expert for review,Pending expert review
+zipper/test/split_teeth/006.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+grid/test/good/007.png,grid,low,expert,0,Route image to an expert for review,Pending expert review
+leather/test/cut/000.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/good/001.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/fabric_interior/013.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+hazelnut/test/crack/002.png,hazelnut,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/cut/016.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/poke/015.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+toothbrush/test/defective/026.png,toothbrush,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+grid/test/bent/011.png,grid,low,expert,0,Route image to an expert for review,Pending expert review
+zipper/test/fabric_interior/009.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+toothbrush/test/defective/011.png,toothbrush,medium,expert,0,Route image to an expert for review,Pending expert review
+zipper/test/rough/007.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/combined/002.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+hazelnut/test/hole/001.png,hazelnut,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/broken_teeth/007.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+hazelnut/test/crack/013.png,hazelnut,medium,expert,0,Route image to an expert for review,Pending expert review
+grid/test/good/010.png,grid,low,expert,0,Route image to an expert for review,Pending expert review
+grid/test/metal_contamination/006.png,grid,medium,expert,0,Route image to an expert for review,Pending expert review
+leather/test/glue/003.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+hazelnut/test/hole/003.png,hazelnut,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/good/025.png,zipper,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+leather/test/cut/004.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/good/007.png,zipper,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+grid/test/good/014.png,grid,medium,expert,0,Route image to an expert for review,Pending expert review
+zipper/test/fabric_interior/005.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/fabric_border/000.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+hazelnut/test/good/017.png,hazelnut,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+hazelnut/test/good/015.png,hazelnut,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+leather/test/poke/005.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+hazelnut/test/print/011.png,hazelnut,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+toothbrush/test/defective/003.png,toothbrush,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+zipper/test/split_teeth/012.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/glue/017.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/poke/011.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+toothbrush/test/good/011.png,toothbrush,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+hazelnut/test/print/001.png,hazelnut,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/color/002.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+grid/test/broken/002.png,grid,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/good/019.png,leather,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+leather/test/good/025.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/fabric_border/015.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+leather/test/good/011.png,leather,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+grid/test/glue/003.png,grid,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+hazelnut/test/cut/016.png,hazelnut,low,skip,0,No additional inspection selected by the scheduler,No additional inspection selected
+zipper/test/squeezed_teeth/010.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
+zipper/test/fabric_border/009.png,zipper,high,prediction,1,Use the Mahalanobis model prediction,Use model prediction
