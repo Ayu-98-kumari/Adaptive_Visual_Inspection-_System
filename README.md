@@ -64,7 +64,9 @@ MyDrive/Integrated/
 │       ├── zipper/  hazelnut/  leather/  toothbrush/   (same layout)
 └── outputs/
     └── vision/                         ← created by the notebook
-        ├── anomaly_scores.csv
+        ├── current_anomaly_score.csv   ← daily use
+        ├── archive/
+        │   └── anomaly_scores_old_vs_new_threshold.csv   ← for the report
         ├── metrics.json
         ├── summary_table.csv
         ├── method_choice.json
@@ -76,8 +78,10 @@ MyDrive/Integrated/
 
 ## What the vision step outputs (for teammates)
 
-### `anomaly_scores.csv`
-One row per **test image and method** (3 methods → each image appears 3 times).
+**Daily use:** `current_anomaly_score.csv`. **For the report:** the `archive/` folder.
+
+### `current_anomaly_score.csv` (daily use)
+One row per **test image and method** (3 methods → each image appears 3 times), at the default threshold.
 
 | Column | Meaning |
 |---|---|
@@ -92,14 +96,25 @@ One row per **test image and method** (3 methods → each image appears 3 times)
 | `predicted_defect_type` | Defect type predicted by the defect-type classifier; falls back to `true_defect_type` when no prediction exists (good images, toothbrush, or Section 6 switched off) |
 | `normalized_score` | Same score on a common **0–1 scale for all methods**: share of good training images that look less unusual (0.97 = more unusual than 97% of good parts; 1.0 = more unusual than all of them) |
 | `normalized_threshold` | The default threshold on that 0–1 scale (≈ 0.95) |
-| `threshold_f1thr` | Comparison threshold: best F1 on the test set (optimistic) |
-| `prediction_f1thr` | `1` if `anomaly_score >= threshold_f1thr`, else `0` |
-| `normalized_threshold_f1thr` | The best-F1 threshold on the 0–1 scale |
 
 `prediction` is always based on the raw `anomaly_score` and `threshold`; the normalised columns are for
-comparing methods and for display. Columns ending in `_f1thr` are for comparison only.
+comparing methods and for display.
 
-Tip: filter on one method (e.g. the best one from `summary_table.csv`) to get one row per image.
+Tip: filter the `method` column to `mahalanobis`, the chosen method (see `method_choice.json`), to get one row per image.
+
+### `archive/anomaly_scores_old_vs_new_threshold.csv` (for the report)
+All 3 methods and both thresholds side by side, so the report can compare them:
+- **new** = the 95th percentile of good training scores (the default, no test labels)
+- **old** = the best-F1 threshold tuned on the test set (optimistic)
+
+Same rows and columns as `current_anomaly_score.csv`, with these columns renamed or added:
+
+| Column | Meaning |
+|---|---|
+| `threshold_new` / `prediction_new` / `normalized_threshold_new` | `threshold` / `prediction` / `normalized_threshold` from the daily file |
+| `threshold_old` | Best-F1 threshold on the test set |
+| `prediction_old` | `1` if `anomaly_score >= threshold_old`, else `0` |
+| `normalized_threshold_old` | The old threshold on the 0–1 scale |
 
 ### `metrics.json`
 ```json
