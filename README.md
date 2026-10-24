@@ -15,16 +15,20 @@ The other steps will be added by teammates and build on the vision outputs descr
 
 | Stage | What happens |
 |---|---|
-| Preprocessing | Resize to 224×224, ImageNet normalisation, optional histogram equalisation or Gaussian blur |
+| Preprocessing | Resize to 224×224, ImageNet normalisation, histogram equalisation or Gaussian blur (configurable) |
 | Features | Pretrained ResNet-18 (no training), last layer removed → 512-d embedding per image |
 | Anomaly detection | kNN (cosine, k=5), Mahalanobis distance, One-Class SVM – trained on good images only |
 | Evaluation | AUC, confusion matrix, recall, false-alarm rate per category and method |
-| Optional | Logistic regression predicts the defect type of defective images |
+| Defect type | Logistic regression predicts the defect type of defective images |
 
 Categories used: `grid`, `zipper`, `hazelnut`, `leather`, `toothbrush`.
 
-> **Note:** the decision threshold is chosen per category and method by maximising F1 on the
-> test set. This is a simplification for the prototype and makes the numbers optimistic.
+> **Thresholds:** two per category and method.
+> - **Default:** the 95th percentile of the cross-validated good training scores (normalised score ≈ 0.95).
+>   It uses no test labels, and about 5% of good parts are expected to be flagged.
+> - **Comparison:** the threshold with the best F1 on the test set. It uses test labels, so its numbers are optimistic.
+>
+> Recall and false-alarm rate are reported for both thresholds.
 
 ## How to open the notebook in Colab
 
@@ -60,18 +64,24 @@ MyDrive/Integrated/
 │       ├── zipper/  hazelnut/  leather/  toothbrush/   (same layout)
 └── outputs/
     └── vision/                         ← created by the notebook
-        ├── anomaly_scores.csv
+        ├── current_anomaly_score.csv   ← daily use
+        ├── archive/
+        │   └── anomaly_scores_old_vs_new_threshold.csv   ← for the report
         ├── metrics.json
         ├── summary_table.csv
-        ├── defect_type_metrics.json    (only if the optional section ran)
+        ├── method_choice.json
+        ├── defect_type_metrics.json    (only if Section 6 ran)
+        ├── defect_type_summary.csv     (only if Section 6 ran)
         ├── features/                   cached ResNet-18 embeddings (.npy)
         └── plots/                      PNG figures
 ```
 
 ## What the vision step outputs (for teammates)
 
-### `anomaly_scores.csv`
-One row per **test image and method** (3 methods → each image appears 3 times).
+**Daily use:** `current_anomaly_score.csv`. **For the report:** the `archive/` folder.
+
+### `current_anomaly_score.csv` (daily use)
+One row per **test image and method** (3 methods → each image appears 3 times), at the default threshold.
 
 | Column | Meaning |
 |---|---|
@@ -81,30 +91,68 @@ One row per **test image and method** (3 methods → each image appears 3 times)
 | `label` | Ground truth: `0` = good, `1` = defective |
 | `method` | `knn_cosine`, `mahalanobis` or `ocsvm` |
 | `anomaly_score` | Higher = more likely defective (scales differ between methods) |
-| `threshold` | Threshold used for this category and method |
-| `prediction` | `1` if `anomaly_score >= threshold`, else `0` |
-| `predicted_defect_type` | Defect type predicted by the optional classifier; falls back to `true_defect_type` when no prediction exists (good images, toothbrush, or optional section removed) |
+| `threshold` | **Default** threshold for this category and method: 95th percentile of good training scores |
+| `prediction` | `1` if `anomaly_score >= threshold`, else `0` (**use this one**) |
+| `predicted_defect_type` | Defect type predicted by the defect-type classifier; falls back to `true_defect_type` when no prediction exists (good images, toothbrush, or Section 6 switched off) |
+| `normalized_score` | Same score on a common **0–1 scale for all methods**: share of good training images that look less unusual (0.97 = more unusual than 97% of good parts; 1.0 = more unusual than all of them) |
+| `normalized_threshold` | The default threshold on that 0–1 scale (≈ 0.95) |
 
-Tip: filter on one method (e.g. the best one from `summary_table.csv`) to get one row per image.
+`prediction` is always based on the raw `anomaly_score` and `threshold`; the normalised columns are for
+comparing methods and for display.
+
+Tip: filter the `method` column to `mahalanobis`, the chosen method (see `method_choice.json`), to get one row per image.
+
+### `archive/anomaly_scores_old_vs_new_threshold.csv` (for the report)
+All 3 methods and both thresholds side by side, so the report can compare them:
+- **new** = the 95th percentile of good training scores (the default, no test labels)
+- **old** = the best-F1 threshold tuned on the test set (optimistic)
+
+Same rows and columns as `current_anomaly_score.csv`, with these columns renamed or added:
+
+| Column | Meaning |
+|---|---|
+| `threshold_new` / `prediction_new` / `normalized_threshold_new` | `threshold` / `prediction` / `normalized_threshold` from the daily file |
+| `threshold_old` | Best-F1 threshold on the test set |
+| `prediction_old` | `1` if `anomaly_score >= threshold_old`, else `0` |
+| `normalized_threshold_old` | The old threshold on the 0–1 scale |
 
 ### `metrics.json`
 ```json
 {
   "hazelnut": {
-    "knn_cosine":  {"auc": 0.97, "recall": 0.93, "false_alarm_rate": 0.05, "threshold": 0.12,
-                    "f1": 0.94, "tp": 65, "fp": 2, "tn": 38, "fn": 5},
+    "knn_cosine":  {"auc": 0.97, "recall": 0.93, "false_alarm_rate": 0.05, "f1": 0.94,
+                    "tp": 65, "fp": 2, "tn": 38, "fn": 5,
+                    "threshold": 0.12, "normalized_threshold": 0.95,
+                    "recall_f1thr": 0.95, "false_alarm_rate_f1thr": 0.03, "f1_f1thr": 0.96,
+                    "tp_f1thr": 67, "fp_f1thr": 1, "tn_f1thr": 39, "fn_f1thr": 3,
+                    "threshold_f1thr": 0.13, "normalized_threshold_f1thr": 0.98},
     "mahalanobis": {...},
     "ocsvm":       {...}
   },
   "grid": {...}
 }
 ```
-(numbers above are only an illustration). **RL scheduling** mainly needs `recall` (chance that a defect
-is caught) and `false_alarm_rate` (chance that a good item is flagged).
+(numbers above are only an illustration). **RL scheduling** should use `recall` (chance that a defect
+is caught) and `false_alarm_rate` (chance that a good item is flagged). These keys, without a suffix, are at the
+default 95th-percentile threshold. Keys ending in `_f1thr` are the same numbers at the best-F1 threshold, for comparison.
+
+### `method_choice.json`
+Which method we continue with and why: `chosen_method` (highest mean AUC), the default threshold rule, the best
+method per category, and mean AUC / recall / false-alarm rate per method at both thresholds.
+
+### `defect_type_metrics.json` / `defect_type_summary.csv` (Section 6)
+Per category:
+- `accuracy`: the average over both halves (train on A and test on B, then the reverse)
+- the accuracy of each half (`accuracy_train_a_test_b`, `accuracy_train_b_test_a`)
+- `random_guess_accuracy`: what random guessing would give (1 ÷ number of defect types)
+- the number of defect types and the size of each half
+
+Toothbrush is skipped.
 
 ### `summary_table.csv` and `plots/`
 Summary per category and method, plus `preprocessing_examples.png`, `roc_curves.png`,
-`confusion_matrices.png` and `defect_type_confusion.png`.
+`confusion_matrices.png`, `score_distributions.png` (all methods on the common 0–1 scale) and
+`defect_type_confusion.png`.
 
 ## Repository layout
 
@@ -116,7 +164,7 @@ requirements.txt               extras beyond Colab defaults (currently none)
 
 Rules: never commit data, outputs or `.npy` files; commit notebooks with outputs cleared.
 
-## Local logic check (optional)
+## Local logic check
 
 Outside Colab, the config switches to `../local_test/` (relative to `notebooks/`, git-ignored).
 Put a tiny dummy dataset with the MVTec layout in `local_test/data/mvtec/` to check that the
