@@ -63,17 +63,30 @@ MyDrive/Integrated/
 │       │   └── ground_truth/           (masks – not used)
 │       ├── zipper/  hazelnut/  leather/  toothbrush/   (same layout)
 └── outputs/
-    └── vision/                         ← created by the notebook
-        ├── current_anomaly_score.csv   ← daily use
-        ├── archive/
-        │   └── anomaly_scores_old_vs_new_threshold.csv   ← for the report
-        ├── metrics.json
-        ├── summary_table.csv
-        ├── method_choice.json
-        ├── defect_type_metrics.json    (only if Section 6 ran)
-        ├── defect_type_summary.csv     (only if Section 6 ran)
-        ├── features/                   cached ResNet-18 embeddings (.npy)
-        └── plots/                      PNG figures
+    ├── vision/                         ← created by Step 1 notebook
+    │   ├── current_anomaly_score.csv   ← daily use
+    │   ├── archive/
+    │   │   └── anomaly_scores_old_vs_new_threshold.csv   ← for the report
+    │   ├── metrics.json
+    │   ├── summary_table.csv
+    │   ├── method_choice.json
+    │   ├── defect_type_metrics.json
+    │   ├── defect_type_summary.csv
+    │   ├── features/                   cached ResNet-18 embeddings (.npy)
+    │   └── plots/                      PNG figures
+    ├── scheduler_outputs/              ← created by Step 2 notebook
+    │   ├── scheduler_inference_ready.csv
+    │   ├── scheduler_evaluation.csv
+    │   ├── scheduler_metadata.json
+    │   ├── realistic_stream_metrics_by_seed.csv
+    │   ├── realistic_stream_summary.csv
+    │   ├── realistic_stream_per_category.csv
+    │   ├── realistic_stream_decisions.csv
+    │   ├── adaptation_demo_results.csv
+    │   └── adaptation_demo_summary.csv
+    └── rag_outputs/                    ← created by Step 3 (RAG)
+        ├── shift_quality_audit_report.md
+        └── rag_shift_summary.json
 ```
 
 ## What the vision step outputs (for teammates)
@@ -154,12 +167,41 @@ Summary per category and method, plus `preprocessing_examples.png`, `roc_curves.
 `confusion_matrices.png`, `score_distributions.png` (all methods on the common 0–1 scale) and
 `defect_type_confusion.png`.
 
+## Step 3 – NLP / RAG reports in a nutshell
+
+Step 3 bridges the quantitative outputs of vision and RL to actionable factory knowledge:
+
+| Component | Function |
+|---|---|
+| Manufacturing Knowledge Base | Standard Operating Procedures (SOPs) for `grid`, `zipper`, `hazelnut`, `leather`, and `toothbrush` detailing root causes, severities, rework protocols, and scrap criteria |
+| Ingestion & Chunking | Semantic section parser with category and defect-code metadata enrichment |
+| Vector Embeddings | Dense similarity vectors (`all-MiniLM-L6-v2`) with resilient built-in subword feature encoder fallback |
+| Hybrid Retriever | Cosine similarity ranking with metadata filtering by product category and defect type |
+| Quality Shift Reports | Ingests `scheduler_inference_ready.csv` and `adaptation_demo_results.csv`, calculates RL cost reductions vs. 100% inspection baseline, identifies defect clusters, and embeds official SOP remediation guidance |
+| Operator Copilot | Interactive assistant explaining why parts were escalated by RL and prescribing specific repair/scrap procedures |
+
+Outputs saved to `MyDrive/Integrated/outputs/rag_outputs/`:
+- `shift_quality_audit_report.md`: Formal executive quality assurance and incident shift audit report.
+- `rag_shift_summary.json`: JSON payload ready for ingestion by Step 4 (BI Dashboard).
+
 ## Repository layout
 
 ```
-notebooks/step1_vision.ipynb   vision notebook (committed with outputs cleared)
-requirements.txt               extras beyond Colab defaults (currently none)
-.gitignore                     keeps data, outputs, embeddings and checkpoints out of git
+notebooks/
+├── step1_vision.ipynb          ← Step 1: Vision anomaly detection
+└── step3_rag_reports.ipynb     ← Step 3: NLP / RAG reports & copilot
+step2_RL_Scheduler.ipynb        ← Step 2: RL inspection scheduling
+rag/                            ← Core modular RAG package
+├── knowledge_base/             ← Industrial SOPs (Markdown)
+├── ingestion.py                ← Markdown chunking & metadata parser
+├── embeddings.py               ← Dense and subword embedding models
+├── vector_store.py             ← Persistent vector indexing & cosine search
+├── retriever.py                ← Hybrid semantic & metadata retriever
+├── telemetry_loader.py         ← Step 1 & 2 CSV loader
+├── report_generator.py         ← Executive shift report generator
+└── copilot.py                  ← Interactive technician copilot
+requirements.txt
+.gitignore
 ```
 
 Rules: never commit data, outputs or `.npy` files; commit notebooks with outputs cleared.

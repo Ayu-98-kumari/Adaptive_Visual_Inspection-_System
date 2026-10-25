@@ -1,6 +1,7 @@
 # Data and outputs (live on Google Drive, never in git)
 data/
 outputs/
+vector_cache/
 *.npy
 *.npz
 
